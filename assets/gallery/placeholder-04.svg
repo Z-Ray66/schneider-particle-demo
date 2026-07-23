@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+  <title id="title">Gallery photo placeholder 04</title>
+  <desc id="description">Replace this placeholder with an approved gallery photograph.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#282e2a"/>
+      <stop offset="1" stop-color="#050806"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".55" stop-color="#fff" stop-opacity=".17"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#background)"/>
+  <path d="M-100 760 900 90h620L520 760Z" fill="url(#beam)"/>
+  <g fill="#edf2ee" opacity=".1">
+    <rect x="170" y="660" width="230" height="100" rx="8"/>
+    <rect x="430" y="560" width="230" height="200" rx="8"/>
+    <rect x="690" y="430" width="230" height="330" rx="8"/>
+    <rect x="950" y="280" width="230" height="480" rx="8"/>
+  </g>
+</svg>
