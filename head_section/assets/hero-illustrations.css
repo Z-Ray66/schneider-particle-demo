@@ -1,0 +1,100 @@
+/* Keep the retired action modules out of both the visual and interaction layers. */
+.action-layer {
+  display: none !important;
+}
+
+.hero-illustrations {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-illustration {
+  position: absolute;
+  bottom: -3.5%;
+  width: clamp(285px, 29vw, 500px);
+  height: auto;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 10px rgb(213 255 222 / 0.12));
+  user-select: none;
+}
+
+.hero-illustration-left {
+  left: clamp(-105px, -5vw, -46px);
+}
+
+.hero-illustration-right {
+  right: clamp(-88px, -4vw, -38px);
+  width: clamp(260px, 26vw, 445px);
+}
+
+@media (max-width: 1180px) {
+  .hero-illustration {
+    bottom: -2%;
+    width: clamp(235px, 28vw, 335px);
+    opacity: 0.8;
+  }
+
+  .hero-illustration-right {
+    width: clamp(220px, 25vw, 300px);
+  }
+}
+
+@media (max-width: 760px) {
+  .hero-illustration {
+    bottom: -1%;
+    width: clamp(205px, 49vw, 285px);
+    opacity: 0.46;
+  }
+
+  .hero-illustration-left {
+    left: -105px;
+  }
+
+  .hero-illustration-right {
+    right: -82px;
+    width: clamp(185px, 43vw, 255px);
+  }
+}
+
+@media (max-width: 420px), (max-height: 640px) {
+  .hero-illustration {
+    width: 205px;
+    opacity: 0.32;
+  }
+
+  .hero-illustration-left {
+    left: -116px;
+  }
+
+  .hero-illustration-right {
+    right: -105px;
+    width: 185px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-illustration-left {
+    animation: hero-illustration-in-left 0.9s 0.12s both cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .hero-illustration-right {
+    animation: hero-illustration-in-right 0.9s 0.2s both cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+@keyframes hero-illustration-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-24px, 18px, 0);
+  }
+}
+
+@keyframes hero-illustration-in-right {
+  from {
+    opacity: 0;
+    transform: translate3d(24px, 18px, 0);
+  }
+}
