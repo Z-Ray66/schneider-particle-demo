@@ -1,19 +1,22 @@
 const growthSection = document.querySelector(".growth-section");
+const updatesSection = document.querySelector(".updates-section");
 
-if (growthSection) {
+function initializeRevealSection(section, readyClass) {
+  if (!section) return;
+
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   if (reducedMotion.matches || !("IntersectionObserver" in window)) {
-    growthSection.classList.add("is-visible");
+    section.classList.add("is-visible");
   } else {
-    growthSection.classList.add("growth-motion-ready");
+    section.classList.add(readyClass);
 
     const revealObserver = new IntersectionObserver(
       ([entry], observer) => {
         if (!entry?.isIntersecting) return;
 
-        growthSection.classList.add("is-visible");
-        observer.unobserve(growthSection);
+        section.classList.add("is-visible");
+        observer.unobserve(section);
       },
       {
         rootMargin: "0px 0px -12%",
@@ -21,6 +24,9 @@ if (growthSection) {
       },
     );
 
-    revealObserver.observe(growthSection);
+    revealObserver.observe(section);
   }
 }
+
+initializeRevealSection(growthSection, "growth-motion-ready");
+initializeRevealSection(updatesSection, "updates-motion-ready");
