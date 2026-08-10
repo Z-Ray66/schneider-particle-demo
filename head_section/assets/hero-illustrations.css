@@ -23,6 +23,7 @@
 
 .hero-illustration-left {
   left: clamp(-105px, -5vw, -46px);
+  width: clamp(330px, 34vw, 580px);
 }
 
 .hero-illustration-right {
@@ -40,6 +41,10 @@
   .hero-illustration-right {
     width: clamp(220px, 25vw, 300px);
   }
+
+  .hero-illustration-left {
+    width: clamp(270px, 33vw, 395px);
+  }
 }
 
 @media (max-width: 760px) {
@@ -51,6 +56,7 @@
 
   .hero-illustration-left {
     left: -105px;
+    width: clamp(225px, 55vw, 320px);
   }
 
   .hero-illustration-right {
@@ -67,6 +73,7 @@
 
   .hero-illustration-left {
     left: -116px;
+    width: 225px;
   }
 
   .hero-illustration-right {

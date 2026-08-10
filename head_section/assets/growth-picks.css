@@ -38,7 +38,7 @@ body::before {
 }
 
 .growth-section__inner {
-  width: min(1120px, 100%);
+  width: min(980px, 100%);
   margin: 0 auto;
 }
 
@@ -60,7 +60,7 @@ body::before {
 .growth-heading p {
   margin: 13px 0 0;
   font-size: clamp(22px, 2.15vw, 30px);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.35;
   letter-spacing: 0.08em;
   opacity: 0.9;
@@ -68,17 +68,17 @@ body::before {
 
 .growth-list {
   display: grid;
-  gap: clamp(20px, 2.8vw, 30px);
+  gap: clamp(18px, 2.2vw, 24px);
 }
 
 .growth-card {
   --reveal-delay: 0ms;
   display: grid;
-  grid-template-columns: minmax(250px, 35%) minmax(0, 1fr);
-  min-height: clamp(166px, 15vw, 198px);
+  grid-template-columns: minmax(210px, 33%) minmax(0, 1fr);
+  min-height: clamp(148px, 12vw, 170px);
   color: #083b2a;
   border: 0;
-  border-radius: 24px;
+  border-radius: 21px;
   outline: none;
   background: transparent;
   transition:
@@ -91,7 +91,7 @@ body::before {
   display: block;
   min-width: 0;
   overflow: hidden;
-  border-radius: 24px 0 0 24px;
+  border-radius: 21px 0 0 21px;
   background:
     linear-gradient(145deg, rgb(255 255 255 / 0.2), rgb(223 255 231 / 0.08)),
     rgb(7 59 43 / 0.28);
@@ -109,8 +109,8 @@ body::before {
   min-width: 0;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(26px, 4vw, 52px);
-  border-radius: 0 24px 24px 0;
+  padding: clamp(22px, 3.3vw, 40px);
+  border-radius: 0 21px 21px 0;
   background: rgb(250 253 251 / 0.97);
 }
 
@@ -120,17 +120,17 @@ body::before {
 }
 
 .growth-card__english {
-  font-size: clamp(22px, 2.4vw, 34px);
+  font-size: clamp(20px, 2vw, 29px);
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.025em;
 }
 
 .growth-card__chinese {
-  margin-top: 13px;
-  color: #527064;
-  font-size: clamp(16px, 1.45vw, 20px);
-  font-weight: 500;
+  margin-top: 10px;
+  color: #45675a;
+  font-size: clamp(15px, 1.25vw, 18px);
+  font-weight: 600;
   line-height: 1.55;
 }
 
@@ -169,17 +169,17 @@ body::before {
 
   .growth-card {
     grid-template-columns: minmax(126px, 34%) minmax(0, 1fr);
-    min-height: 148px;
-    border-radius: 19px;
+    min-height: 132px;
+    border-radius: 18px;
   }
 
   .growth-card__media {
-    border-radius: 19px 0 0 19px;
+    border-radius: 18px 0 0 18px;
   }
 
   .growth-card__copy {
-    padding: clamp(18px, 5vw, 30px);
-    border-radius: 0 19px 19px 0;
+    padding: clamp(18px, 4.5vw, 26px);
+    border-radius: 0 18px 18px 0;
   }
 
   .growth-card__english {
@@ -189,6 +189,7 @@ body::before {
   .growth-card__chinese {
     margin-top: 9px;
     font-size: clamp(14px, 3.5vw, 17px);
+    font-weight: 600;
   }
 }
 
@@ -217,7 +218,7 @@ body::before {
 
   .growth-card {
     grid-template-columns: 32% minmax(0, 1fr);
-    min-height: 138px;
+    min-height: 124px;
   }
 
   .growth-card__copy {
