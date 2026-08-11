@@ -65,52 +65,6 @@
         url: "",
       },
     ],
-    learningPaths: [
-      {
-        id: 201,
-        title: "Start Strong at GSC",
-        titleZh: "新员工快速启航",
-        audience: "New Joiners",
-        summary: "理解 GSC 业务、质量文化、安全要求与协作方式，建立入职前三个月的学习节奏。",
-        moduleCount: 6,
-        duration: "5.5 hrs",
-        theme: "green",
-        url: "",
-      },
-      {
-        id: 202,
-        title: "Lead People with Impact",
-        titleZh: "高影响力团队管理",
-        audience: "People Managers",
-        summary: "覆盖目标对齐、反馈辅导、人才发展和团队绩效，支持管理者在真实场景中实践。",
-        moduleCount: 8,
-        duration: "8 hrs",
-        theme: "blue",
-        url: "",
-      },
-      {
-        id: 203,
-        title: "Data-Informed Professional",
-        titleZh: "数据驱动的专业人才",
-        audience: "Individual Contributors",
-        summary: "从数据素养到可视化表达，提升分析业务问题、形成洞察并推动行动的能力。",
-        moduleCount: 5,
-        duration: "6 hrs",
-        theme: "violet",
-        url: "",
-      },
-      {
-        id: 204,
-        title: "Expertise to Influence",
-        titleZh: "从专业专家到组织影响者",
-        audience: "SMEs & Project Leads",
-        summary: "把专业知识转化为标准、课程与跨团队影响力，支持专家经验在组织内规模化传递。",
-        moduleCount: 7,
-        duration: "7.5 hrs",
-        theme: "amber",
-        url: "",
-      },
-    ],
     replays: [
       {
         id: 301,
@@ -210,11 +164,10 @@
       }
 
       const lists = this.config.lists || {};
-      const [essentialItems, upcomingClasses, learningPaths, replays, communities] =
+      const [essentialItems, upcomingClasses, replays, communities] =
         await Promise.all([
           this.getListItems(lists.essentialLearning),
           this.getListItems(lists.upcomingClasses),
-          this.getListItems(lists.learningPaths),
           this.getListItems(lists.replays),
           this.getListItems(lists.communities),
         ]);
@@ -222,7 +175,6 @@
       return {
         essentialLearning: essentialItems[0] || null,
         upcomingClasses,
-        learningPaths,
         replays,
         communities,
         source: "sharepoint",

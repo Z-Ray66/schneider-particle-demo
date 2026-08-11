@@ -145,7 +145,6 @@ svg {
 .hero-shortcuts a:focus-visible,
 .text-link:focus-visible,
 .course-card:focus-visible,
-.path-card:focus-visible,
 .replay-item:focus-visible,
 .community-card:focus-visible {
   outline: 3px solid var(--lime);
@@ -534,7 +533,7 @@ svg {
   right: -2%;
 }
 
-.orbit-card--paths {
+.orbit-card--replays {
   bottom: 5%;
   left: -5%;
 }
@@ -991,129 +990,6 @@ svg {
   color: #fff;
   background: var(--green-700);
   transform: translateX(5px);
-}
-
-.path-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.path-card {
-  --path-color: #176c4b;
-  position: relative;
-  display: grid;
-  min-height: 285px;
-  overflow: hidden;
-  padding: 32px;
-  grid-template-columns: minmax(0, 1fr) 128px;
-  gap: 20px;
-  color: var(--ink);
-  border-radius: var(--radius-md);
-  background: #fff;
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 280ms ease;
-}
-
-.path-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-7px);
-}
-
-.path-card__content {
-  position: relative;
-  z-index: 2;
-}
-
-.path-card__audience {
-  color: var(--path-color);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.path-card h3 {
-  max-width: 370px;
-  margin: 14px 0 0;
-  font-size: 27px;
-  font-weight: 650;
-  line-height: 1.14;
-  letter-spacing: -0.035em;
-}
-
-.path-card__zh {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.path-card__summary {
-  max-width: 390px;
-  margin: 15px 0 0;
-  color: #71807a;
-  font-size: 12px;
-  line-height: 1.65;
-}
-
-.path-card__stats {
-  display: flex;
-  margin-top: 23px;
-  gap: 18px;
-  color: #556660;
-  font-size: 11px;
-  font-weight: 650;
-}
-
-.path-card__visual {
-  position: relative;
-  width: 128px;
-  height: 100%;
-  min-height: 190px;
-  border-radius: 64px 64px 20px 20px;
-  background: color-mix(in srgb, var(--path-color) 12%, white);
-}
-
-.path-card__visual::before,
-.path-card__visual::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-}
-
-.path-card__visual::before {
-  top: 25px;
-  left: 25px;
-  width: 78px;
-  height: 78px;
-  border: 1px solid color-mix(in srgb, var(--path-color) 52%, transparent);
-  box-shadow:
-    0 0 0 14px color-mix(in srgb, var(--path-color) 8%, transparent),
-    0 0 0 29px color-mix(in srgb, var(--path-color) 5%, transparent);
-}
-
-.path-card__visual::after {
-  top: 57px;
-  left: 57px;
-  width: 14px;
-  height: 14px;
-  background: var(--path-color);
-}
-
-.path-card__number {
-  position: absolute;
-  right: 17px;
-  bottom: 15px;
-  color: color-mix(in srgb, var(--path-color) 80%, black);
-  font-size: 35px;
-  font-weight: 700;
-  letter-spacing: -0.06em;
-}
-
-.replay-section {
-  background: #fff;
 }
 
 .replay-toolbar {
@@ -1694,10 +1570,6 @@ svg {
     text-align: left;
   }
 
-  .path-grid {
-    grid-template-columns: 1fr;
-  }
-
   .community-grid {
     grid-template-columns: 1fr;
   }
@@ -1798,30 +1670,6 @@ svg {
 
   .course-card {
     min-height: 340px;
-  }
-
-  .path-card {
-    min-height: 315px;
-    padding: 27px;
-    grid-template-columns: minmax(0, 1fr) 82px;
-  }
-
-  .path-card__visual {
-    width: 82px;
-  }
-
-  .path-card__visual::before {
-    top: 20px;
-    left: 15px;
-    width: 52px;
-    height: 52px;
-  }
-
-  .path-card__visual::after {
-    top: 42px;
-    left: 37px;
-    width: 10px;
-    height: 10px;
   }
 
   .replay-item {

@@ -40,7 +40,7 @@ sharePoint: {
 
 ## 需要建立的 SharePoint Lists
 
-建议建立以下五个 List。字段名称最好使用下表中的英文内部名称；如果企业已有 List，只需在 `config.js` 的 `fields` 中修改映射。
+建议建立以下四个 List。字段名称最好使用下表中的英文内部名称；如果企业已有 List，只需在 `config.js` 的 `fields` 中修改映射。
 
 ### 1. Learning Hub - Essential Learning
 
@@ -66,18 +66,7 @@ sharePoint: {
 | LinkUrl | 超链接 |
 | IsActive | 是/否 |
 
-### 3. Learning Hub - Learning Paths
-
-| 字段 | 建议类型 |
-| --- | --- |
-| Title / TitleZh / Audience | 单行文本 |
-| Summary | 多行文本 |
-| ModuleCount / SortOrder | 数字 |
-| Duration / Theme | 单行文本或选项 |
-| LinkUrl | 超链接 |
-| IsActive | 是/否 |
-
-### 4. Learning Hub - Replays
+### 3. Learning Hub - Replays
 
 | 字段 | 建议类型 |
 | --- | --- |
@@ -88,7 +77,7 @@ sharePoint: {
 | IsActive | 是/否 |
 | SortOrder | 数字 |
 
-### 5. Learning Hub - Communities
+### 4. Learning Hub - Communities
 
 | 字段 | 建议类型 |
 | --- | --- |
@@ -107,7 +96,7 @@ GitHub Pages 被嵌入 SharePoint 时处于跨域 iframe 中，通常不能直�
 ## 正式上线前需要配置
 
 1. 在 `config.js > routes` 填写 Home、Competency Framework、Experts、Insights 及各业务入口的正式 URL。
-2. 建立或确认五个 SharePoint Lists，并核对字段内部名称。
+2. 建立或确认四个 SharePoint Lists，并核对字段内部名称。
 3. 决定用 SPFx 部署，还是让代码运行在 SharePoint 同域环境中。
 4. 将 List 权限设置为员工只读、内容维护人员可编辑。
 5. 用真实数据完成 UAT，重点检查日期、空数据、失效链接和移动端显示。

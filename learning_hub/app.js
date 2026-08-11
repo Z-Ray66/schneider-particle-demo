@@ -18,13 +18,6 @@
     Operations: "#efad39",
   };
 
-  const pathColors = {
-    green: "#148f58",
-    blue: "#2f77d0",
-    violet: "#7555bd",
-    amber: "#bd7d16",
-  };
-
   const communityColors = {
     lime: "#c8f43d",
     mint: "#75e0a0",
@@ -264,38 +257,6 @@
     initializeRevealMotion();
   }
 
-  function renderPaths() {
-    const root = query("[data-path-list]");
-    if (!root || !state.data) return;
-    const items = state.data.learningPaths.filter(matchesSearch);
-
-    if (!items.length) {
-      root.innerHTML = emptyState("没有找到匹配的学习路径", "请尝试搜索其他岗位、能力或主题。");
-      return;
-    }
-
-    root.innerHTML = items.map((item, index) => {
-      const color = pathColors[item.theme] || pathColors.green;
-      const label = `${item.title} ${item.titleZh}`;
-      return `
-        <a class="path-card reveal-item" style="--path-color:${color}" ${linkAttributes(item.url, label, config.contentLinkTarget)}>
-          <div class="path-card__content">
-            <span class="path-card__audience">FOR ${escapeHtml(item.audience)}</span>
-            <h3>${escapeHtml(item.title)}</h3>
-            <p class="path-card__zh">${escapeHtml(item.titleZh)}</p>
-            <p class="path-card__summary">${escapeHtml(item.summary)}</p>
-            <div class="path-card__stats">
-              <span>${escapeHtml(item.moduleCount)} modules</span>
-              <span>${escapeHtml(item.duration)}</span>
-            </div>
-          </div>
-          <div class="path-card__visual" aria-hidden="true"><span class="path-card__number">${String(index + 1).padStart(2, "0")}</span></div>
-        </a>`;
-    }).join("");
-
-    initializeRevealMotion();
-  }
-
   function renderReplays() {
     const root = query("[data-replay-list]");
     if (!root || !state.data) return;
@@ -371,7 +332,6 @@
 
   function renderAll() {
     renderClasses();
-    renderPaths();
     renderReplays();
     renderCommunities();
   }
@@ -441,15 +401,14 @@
     state.data = {
       ...data,
       upcomingClasses: Array.isArray(data.upcomingClasses) ? data.upcomingClasses : [],
-      learningPaths: Array.isArray(data.learningPaths) ? data.learningPaths : [],
       replays: Array.isArray(data.replays) ? data.replays : [],
       communities: Array.isArray(data.communities) ? data.communities : [],
     };
 
     const classCount = query("[data-hero-class-count]");
-    const pathCount = query("[data-hero-path-count]");
+    const replayCount = query("[data-hero-replay-count]");
     if (classCount) classCount.textContent = String(state.data.upcomingClasses.length).padStart(2, "0");
-    if (pathCount) pathCount.textContent = String(state.data.learningPaths.length).padStart(2, "0");
+    if (replayCount) replayCount.textContent = String(state.data.replays.length).padStart(2, "0");
 
     renderEssential(state.data.essentialLearning);
     renderAll();
@@ -459,7 +418,7 @@
   function renderLoadError(error) {
     const message = error instanceof Error ? error.message : String(error);
     const errorMarkup = `<div class="error-state"><strong>内容暂时无法加载</strong><span>${escapeHtml(message)}</span></div>`;
-    ["[data-upcoming-list]", "[data-path-list]", "[data-replay-list]", "[data-community-list]"]
+    ["[data-upcoming-list]", "[data-replay-list]", "[data-community-list]"]
       .forEach((selector) => {
         const root = query(selector);
         if (root) root.innerHTML = errorMarkup;

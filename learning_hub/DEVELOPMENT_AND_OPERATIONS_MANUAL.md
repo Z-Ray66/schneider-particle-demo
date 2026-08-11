@@ -176,27 +176,7 @@ essentialLearning: {
 
 删除过期课程时，应删除整个对象及其前后的逗号，随后执行语法检查。
 
-### 5.4 新增学习路径
-
-在 `learningPaths` 中增加对象：
-
-```js
-{
-  id: 205,
-  title: "Project Leadership Foundations",
-  titleZh: "项目领导力基础",
-  audience: "Project Leads",
-  summary: "面向项目负责人的结构化学习路径。",
-  moduleCount: 6,
-  duration: "7 hrs",
-  theme: "blue",
-  url: "https://正式路径地址",
-},
-```
-
-`theme` 推荐值：`green`、`blue`、`violet`、`amber`。
-
-### 5.5 新增课程回放
+### 5.4 新增课程回放
 
 在 `replays` 中增加对象：
 
@@ -215,7 +195,7 @@ essentialLearning: {
 
 如果讲师姓名属于公司内部信息，必须先确认 GitHub Pages 的可见性和公司发布政策。
 
-### 5.6 新增学习社群
+### 5.5 新增学习社群
 
 在 `communities` 中增加对象：
 
@@ -234,7 +214,7 @@ essentialLearning: {
 
 `theme` 推荐值：`lime`、`mint`、`amber`。
 
-### 5.7 配置导航和业务入口
+### 5.6 配置导航和业务入口
 
 打开 `learning_hub/config.js`，填写 `routes`：
 
@@ -253,7 +233,7 @@ home: {
 
 不要把访问令牌附加在 URL 中。
 
-### 5.8 本地预览和检查
+### 5.7 本地预览和检查
 
 在仓库根目录运行：
 
@@ -285,7 +265,7 @@ node --check learning_hub\data-provider.js
 node --check learning_hub\app.js
 ```
 
-### 5.9 提交代码
+### 5.8 提交代码
 
 只暂存本次修改的文件：
 
@@ -317,7 +297,7 @@ git push -u origin content/2026-08-learning-update
 git push origin main
 ```
 
-### 5.10 验证 GitHub Pages
+### 5.9 验证 GitHub Pages
 
 GitHub 支持从指定分支或 GitHub Actions 发布 Pages；设置入口是 Repository → Settings → Pages：[GitHub Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)。
 
@@ -393,9 +373,8 @@ Microsoft 的 SPFx 文档说明，`SPHttpClient` 会带上 SharePoint 认证 Coo
 
 1. `Learning Hub - Essential Learning`
 2. `Learning Hub - Upcoming Classes`
-3. `Learning Hub - Learning Paths`
-4. `Learning Hub - Replays`
-5. `Learning Hub - Communities`
+3. `Learning Hub - Replays`
+4. `Learning Hub - Communities`
 
 字段详细定义见 `README.md`。`config.js > sharePoint.lists` 已包含默认 List 名称、查询字段和页面字段映射。
 
@@ -455,7 +434,7 @@ SharePoint 的 List 默认继承站点权限，也可以在 List 层停止继承
 
 - 开发或测试站点。
 - App Catalog 使用或上传权限。
-- 五个 Lists 的访问权限。
+- 四个 Lists 的访问权限。
 - 正式页面 URL 和站点主题要求。
 - 安全、隐私和发布审批要求。
 
@@ -498,7 +477,6 @@ spfx-learning-hub/
       LearningHub.tsx
       EssentialLearning.tsx
       UpcomingClasses.tsx
-      LearningPaths.tsx
       ReplayLibrary.tsx
       Communities.tsx
     services/
@@ -625,7 +603,7 @@ Microsoft 的完整打包和 App Catalog 流程见：[Deploy an SPFx web part](h
 建议节奏：
 
 - 每周：检查新课程、席位和失效链接。
-- 每月：归档过期内容，复核学习路径和社群信息。
+- 每月：归档过期内容，复核课程回放和社群信息。
 - 每季度：检查权限、依赖、浏览器兼容和数据字段。
 - 每次发布：保留测试记录和回退点。
 
@@ -717,8 +695,8 @@ git push origin main
 
 ### 内容
 
-- [ ] 五个 Lists 已建立，内部字段名已经核对。
-- [ ] 正式课程、路径、回放、社群数据已导入。
+- [ ] 四个 Lists 已建立，内部字段名已经核对。
+- [ ] 正式课程、回放、社群数据已导入。
 - [ ] 所有链接已点击验证。
 - [ ] 日期和时区正确。
 - [ ] 示例数据已关闭。
@@ -748,7 +726,7 @@ git push origin main
 
 ### 第二阶段：数据治理
 
-- 建立五个 Lists。
+- 建立四个 Lists。
 - 明确字段、权限、Owner、审核和归档流程。
 - 导入少量测试数据。
 
