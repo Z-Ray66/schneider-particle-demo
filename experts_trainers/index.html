@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="GSC China Experts and Internal Trainers" />
+    <title>Experts &amp; Internal Trainers | GSC China</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./content.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <main id="main-content">
+      <!-- FIXED CONTENT: page positioning and network introduction. -->
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero__noise" aria-hidden="true"></div>
+        <div class="hero__beam" aria-hidden="true"></div>
+        <div class="page-shell hero__inner">
+          <div class="hero__copy reveal-item is-visible">
+            <p class="eyebrow">KNOWLEDGE LIVES IN PEOPLE</p>
+            <h1 id="page-title">Experts <i>&amp;</i><br />Internal Trainers</h1>
+            <p>连接 GSC China 内部专家、认证讲师、金牌课程与真实业务经验，让知识更容易被找到、分享和复用。</p>
+          </div>
+          <div class="hero-stage reveal-item is-visible" aria-hidden="true">
+            <div class="hero-stage__ring"></div>
+            <div class="hero-stage__portrait"><span data-hero-initials>LW</span><small>FEATURED<br />VOICE</small></div>
+            <div class="hero-stage__card hero-stage__card--one"><span>QUALITY</span><strong>SME</strong></div>
+            <div class="hero-stage__card hero-stage__card--two"><span>LEARN</span><strong>SHARE</strong></div>
+            <div class="hero-stage__card hero-stage__card--three"><span>GROW</span><strong>TOGETHER</strong></div>
+          </div>
+        </div>
+        <div class="hero-ticker" aria-hidden="true"><div>EXPERTISE IN MOTION · LEARN FROM PRACTICE · SHARE WHAT WORKS · EXPERTISE IN MOTION · LEARN FROM PRACTICE · SHARE WHAT WORKS ·</div></div>
+      </section>
+
+      <section class="section section--intro" aria-labelledby="network-title">
+        <div class="page-shell intro-layout">
+          <div class="intro-title reveal-item"><p class="eyebrow eyebrow--green">THE INTERNAL NETWORK</p><h2 id="network-title">经验不应该停留在一个人的电脑里</h2></div>
+          <div class="intro-copy reveal-item">
+            <p>专家网络把真实项目经验转化成可复用的课程、案例、答疑和辅导。员工可以按主题寻找合适的人，也可以从金牌课程开始。</p>
+            <div class="intro-steps">
+              <span><b>01</b>发现专业主题</span><span><b>02</b>找到合适专家</span><span><b>03</b>连接课程与实践</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- UPDATE CONTENT: featured course comes from content.js. -->
+      <section class="section section--featured" aria-labelledby="featured-title" data-maintenance-zone="content.js: featuredCourse">
+        <div class="page-shell">
+          <article class="featured-course reveal-item" data-featured-course></article>
+        </div>
+      </section>
+
+      <!-- UPDATE CONTENT: trainer roster comes from content.js. -->
+      <section class="section section--directory" id="expert-directory" aria-labelledby="directory-title" data-maintenance-zone="content.js: experts">
+        <div class="page-shell">
+          <header class="section-heading reveal-item">
+            <div><p class="eyebrow eyebrow--green">FIND THE RIGHT VOICE</p><h2 id="directory-title">专家与内部讲师</h2></div>
+            <p>按主题筛选讲师，点击人物卡片可查看可分享主题、语言和连接方式。当前姓名与内容均为页面结构示例。</p>
+          </header>
+          <div class="filter-row reveal-item" role="group" aria-label="按专业主题筛选" data-topic-filters></div>
+          <div class="directory-layout">
+            <div class="expert-grid" data-expert-grid aria-live="polite"></div>
+            <aside class="expert-spotlight reveal-item" data-expert-spotlight aria-live="polite"></aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- UPDATE CONTENT: course cards come from content.js. -->
+      <section class="section section--courses" aria-labelledby="courses-title" data-maintenance-zone="content.js: courses">
+        <div class="page-shell">
+          <header class="section-heading section-heading--light reveal-item">
+            <div><p class="eyebrow">LEARN FROM EXPERIENCE</p><h2 id="courses-title">金牌课程精选</h2></div>
+            <p>用反馈、复用价值和业务影响筛选值得再次打开的内部课程。</p>
+          </header>
+          <div class="course-rail" data-course-rail></div>
+        </div>
+      </section>
+
+      <section class="section section--contribute" aria-labelledby="contribute-title">
+        <div class="page-shell contribute-card reveal-item">
+          <span class="contribute-card__mark" aria-hidden="true">＋</span>
+          <div><p class="eyebrow eyebrow--green">SHARE YOUR PRACTICE</p><h2 id="contribute-title">你也可以成为内部知识贡献者</h2><p>如果你有成熟的方法、案例或可复用的业务经验，可以提交分享主题，由学习团队协助设计成一次高质量内部分享。</p></div>
+          <a href="#" data-action-key="contributeUrl">提交分享主题 <span>↗</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer"><span>GSC China Learning &amp; Competency</span><span>Experts &amp; Internal Trainers</span></footer>
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+  </body>
+</html>

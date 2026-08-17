@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="GSC China Competency Framework" />
+    <title>Competency Framework | GSC China Learning &amp; Competency</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./content.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <main id="main-content">
+      <!-- FIXED CONTENT: framework introduction and visual language. -->
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero__grid" aria-hidden="true"></div>
+        <div class="hero__glow" aria-hidden="true"></div>
+        <div class="page-shell hero__inner">
+          <div class="hero__copy reveal-item is-visible">
+            <p class="eyebrow">GSC CHINA · CAPABILITY STANDARDS</p>
+            <h1 id="page-title">Competency<br /><span>Framework</span></h1>
+            <p class="hero__lead">把能力定义、等级标准、岗位要求和发展建议放在同一套清晰的成长坐标中。</p>
+            <div class="hero__legend" aria-label="能力框架构成">
+              <span>DEFINE</span><i></i><span>ASSESS</span><i></i><span>GROW</span>
+            </div>
+          </div>
+
+          <div class="capability-map reveal-item is-visible" aria-label="四级能力模型示意图">
+            <div class="capability-map__halo"></div>
+            <div class="capability-map__ring capability-map__ring--one"><span>L1</span></div>
+            <div class="capability-map__ring capability-map__ring--two"><span>L2</span></div>
+            <div class="capability-map__ring capability-map__ring--three"><span>L3</span></div>
+            <div class="capability-map__ring capability-map__ring--four"><span>L4</span></div>
+            <div class="capability-map__core"><strong>ROLE</strong><small>CAPABILITY</small></div>
+            <span class="capability-map__node capability-map__node--a"></span>
+            <span class="capability-map__node capability-map__node--b"></span>
+            <span class="capability-map__node capability-map__node--c"></span>
+          </div>
+        </div>
+        <a class="scroll-cue" href="#framework-pillars" aria-label="查看能力框架内容"><span></span>EXPLORE</a>
+      </section>
+
+      <section class="section section--paper" id="framework-pillars" aria-labelledby="pillars-title">
+        <div class="page-shell">
+          <header class="section-heading reveal-item">
+            <div><p class="eyebrow eyebrow--green">ONE SHARED LANGUAGE</p><h2 id="pillars-title">从定义到行动</h2></div>
+            <p>框架不是一张静态表格，而是一套让员工、经理与学习团队用同一种语言讨论成长的方法。</p>
+          </header>
+          <div class="pillar-grid">
+            <article class="pillar-card tilt-card reveal-item">
+              <span class="pillar-card__number">01</span><h3>能力定义</h3>
+              <p>说明每项核心能力的业务含义、典型行为与适用场景，让抽象要求变得可观察。</p>
+              <small>Meaning · Behaviours · Context</small>
+            </article>
+            <article class="pillar-card tilt-card reveal-item">
+              <span class="pillar-card__number">02</span><h3>岗位能力要求</h3>
+              <p>按照职能和岗位展示目标等级，使员工知道“当前角色需要做到什么程度”。</p>
+              <small>Role · Level · Evidence</small>
+            </article>
+            <article class="pillar-card tilt-card reveal-item">
+              <span class="pillar-card__number">03</span><h3>发展建议</h3>
+              <p>把能力差距连接到课程、实践任务、导师资源与经理辅导建议。</p>
+              <small>Learn · Practise · Reflect</small>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--levels" aria-labelledby="levels-title">
+        <div class="page-shell">
+          <header class="section-heading section-heading--light reveal-item">
+            <div><p class="eyebrow">PROFICIENCY SCALE</p><h2 id="levels-title">四个层级，一条成长路径</h2></div>
+            <p>等级描述关注可证明的工作行为，而不是单纯的课程完成数量。</p>
+          </header>
+          <div class="level-track">
+            <article class="level-card reveal-item"><span>L1</span><div><strong>Awareness</strong><b>了解</b></div><p>理解基本概念、规则与术语，能够在指导下识别正确做法。</p></article>
+            <article class="level-card reveal-item"><span>L2</span><div><strong>Working</strong><b>应用</b></div><p>能够在常见工作情境中独立运用方法，并交付符合要求的结果。</p></article>
+            <article class="level-card reveal-item"><span>L3</span><div><strong>Proficient</strong><b>精通</b></div><p>能处理复杂情境、改进实践，并向他人提供专业建议与辅导。</p></article>
+            <article class="level-card reveal-item"><span>L4</span><div><strong>Expert</strong><b>引领</b></div><p>定义标准、影响跨团队实践，并推动组织级能力持续演进。</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- UPDATE CONTENT: maintain role data only in content.js. -->
+      <section class="section section--explorer" id="role-explorer" aria-labelledby="explorer-title" data-maintenance-zone="content.js: roles">
+        <div class="page-shell">
+          <header class="section-heading reveal-item">
+            <div><p class="eyebrow eyebrow--green">ROLE EXPLORER</p><h2 id="explorer-title">查询你的岗位能力</h2></div>
+            <p>选择一个角色，查看能力重点、目标等级和下一步发展建议。当前为结构示例，可由维护者单独更新数据。</p>
+          </header>
+
+          <div class="role-explorer reveal-item">
+            <div class="role-tabs" role="tablist" aria-label="选择岗位" data-role-tabs></div>
+            <article class="role-panel" data-role-panel aria-live="polite"></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--closing" aria-labelledby="closing-title">
+        <div class="page-shell closing-card reveal-item">
+          <div><p class="eyebrow">YOUR NEXT MOVE</p><h2 id="closing-title">把能力要求变成下一次实践</h2></div>
+          <p>选择一个最重要的能力目标，与经理确认期望，完成一次有反馈的真实任务，再回到框架复盘。</p>
+          <a class="action-link" href="#" data-action-link data-action-key="developmentUrl">查看发展资源 <span>↗</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer"><span>GSC China Learning &amp; Competency</span><span>Competency Framework</span></footer>
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+  </body>
+</html>

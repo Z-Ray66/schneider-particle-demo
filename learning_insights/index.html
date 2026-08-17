@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="GSC China aggregated learning insights" />
+    <title>Learning Insights | GSC China Learning &amp; Competency</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./content.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <main id="main-content">
+      <!-- FIXED CONTENT: page purpose and data safety statement. -->
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero__matrix" aria-hidden="true"></div>
+        <div class="page-shell hero__inner">
+          <div class="hero__copy reveal-item is-visible">
+            <p class="eyebrow">AGGREGATED DATA · SHARED CLARITY</p>
+            <h1 id="page-title">Learning<br /><span>Insights</span></h1>
+            <p>用可公开、可解释的聚合指标观察学习参与、体验和能力覆盖趋势，不暴露任何个人学习记录。</p>
+            <div class="hero__status"><i></i><span data-data-status>示例数据</span><small data-updated-at>更新于 2026 Q3</small></div>
+          </div>
+          <div class="signal-field reveal-item is-visible" aria-hidden="true">
+            <div class="signal-field__orbit"></div>
+            <div class="signal-field__core"><span>91</span><b>%</b><small>COMPLETION</small></div>
+            <div class="signal-card signal-card--one"><small>FEEDBACK</small><strong>4.6</strong></div>
+            <div class="signal-card signal-card--two"><small>TRAINERS</small><strong>38</strong></div>
+            <div class="signal-card signal-card--three"><small>COVERAGE</small><strong>72%</strong></div>
+          </div>
+        </div>
+        <div class="data-ribbon" aria-hidden="true"><span>01</span><i></i><span>PARTICIPATION</span><i></i><span>EXPERIENCE</span><i></i><span>CAPABILITY</span><i></i><span>04</span></div>
+      </section>
+
+      <!-- UPDATE CONTENT: summary metrics come from content.js. -->
+      <section class="section section--metrics" aria-labelledby="metrics-title" data-maintenance-zone="content.js: metrics">
+        <div class="page-shell">
+          <header class="section-heading reveal-item">
+            <div><p class="eyebrow eyebrow--green">CURRENT SIGNALS</p><h2 id="metrics-title">组织学习概览</h2></div>
+            <p>以下为聚合展示结构示例。维护者可以手动更新内容文件，真实高频报表建议使用页面末尾的 SharePoint 原生看板分界。</p>
+          </header>
+          <div class="metric-grid" data-metric-grid aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- UPDATE CONTENT: trend and topic data come from content.js. -->
+      <section class="section section--story" aria-labelledby="story-title" data-maintenance-zone="content.js: completionTrend, topicDistribution">
+        <div class="page-shell">
+          <header class="section-heading section-heading--light reveal-item">
+            <div><p class="eyebrow">FROM SNAPSHOT TO STORY</p><h2 id="story-title">趋势比单点数字更重要</h2></div>
+            <p>结合季度趋势和主题参与结构，观察组织学习是否在持续发生，以及资源是否覆盖关键能力领域。</p>
+          </header>
+          <div class="story-grid">
+            <article class="trend-card reveal-item">
+              <div class="card-heading"><div><small>ESSENTIAL LEARNING</small><h3>季度完成率趋势</h3></div><span data-trend-change></span></div>
+              <div class="chart-wrap" data-trend-chart aria-label="季度完成率折线图"></div>
+            </article>
+            <article class="distribution-card reveal-item">
+              <div class="card-heading"><div><small>LEARNING MIX</small><h3>主题参与结构</h3></div></div>
+              <div class="distribution" data-distribution></div>
+            </article>
+          </div>
+          <div class="insight-strip" data-insight-strip></div>
+        </div>
+      </section>
+
+      <section class="section section--principles" aria-labelledby="principles-title">
+        <div class="page-shell">
+          <header class="section-heading reveal-item">
+            <div><p class="eyebrow eyebrow--green">READ WITH CARE</p><h2 id="principles-title">看懂数据，也尊重数据边界</h2></div>
+            <p>Learning Insights 用于组织层面的透明沟通，不用于公开比较个人或进行脱离业务情境的排名。</p>
+          </header>
+          <div class="principle-grid">
+            <article class="reveal-item"><span>01</span><h3>只展示聚合数据</h3><p>不在公开页面呈现员工姓名、工号、个人完成记录或个人能力评估。</p></article>
+            <article class="reveal-item"><span>02</span><h3>提供时间与口径</h3><p>每个指标注明更新时间、统计周期和业务定义，避免把旧数据当作当前状态。</p></article>
+            <article class="reveal-item"><span>03</span><h3>从信号走向行动</h3><p>指标用来识别值得讨论的问题，最终仍需结合团队反馈和真实业务情境。</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- SHAREPOINT SPLIT POINT:
+           Put this GitHub Embed Web Part above the native Power BI/List Web Part.
+           Remove or hide this handoff card after the native report is added. -->
+      <section class="sharepoint-boundary" data-sharepoint-handoff aria-labelledby="handoff-title">
+        <div class="page-shell">
+          <div class="boundary-line"><span>SHAREPOINT PAGE SPLIT</span></div>
+          <article class="handoff-card reveal-item">
+            <div class="handoff-card__visual" aria-hidden="true"><i></i><i></i><i></i><span>LIVE</span></div>
+            <div><p class="eyebrow eyebrow--green">NATIVE REPORT AREA</p><h2 id="handoff-title">高频更新看板从这里交给 SharePoint</h2><p>正式上线时，让本 HTML Embed 在此结束，并在 SharePoint 页面下方直接添加经过公司批准的 Power BI、List 或其他原生 Web Part。这样数据更新不需要修改网页代码。</p></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer"><span>GSC China Learning &amp; Competency</span><span>Learning Insights · Aggregated data only</span></footer>
+  </body>
+</html>
