@@ -1,31 +1,13 @@
 (function initializeLearningHub(global, document) {
   "use strict";
 
-  const config = global.LEARNING_HUB_CONFIG || {};
-  const providerFactory = global.LearningHubDataProvider;
-  const provider = providerFactory?.create(config);
-  const state = {
-    data: null,
-    searchTerm: "",
-    courseTopic: "all",
-    replayTopic: "all",
-  };
-
-  const topicColors = {
-    Quality: "#3dcd58",
-    Leadership: "#3f9fe8",
-    Digital: "#8e72df",
-    Operations: "#efad39",
-  };
-
-  const communityColors = {
-    lime: "#c8f43d",
-    mint: "#75e0a0",
-    amber: "#f4c34f",
-  };
-
+  const content = global.LEARNING_HUB_CONTENT || { courses: [], replays: [] };
+  const config = global.LEARNING_HUB_CONFIG || { routes: {} };
+  const state = { courseTopic: "all", replayTopic: "all" };
+  const topicColors = { Quality: "#3dcd58", Leadership: "#3f9fe8", Digital: "#8e72df", Operations: "#efad39", Compliance: "#c8f43d" };
   const query = (selector, root = document) => root.querySelector(selector);
   const queryAll = (selector, root = document) => [...root.querySelectorAll(selector)];
+  let toastTimer = 0;
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -37,13 +19,11 @@
   }
 
   function safeUrl(value) {
-    const url = String(value || "").trim();
-    if (!url) return "";
-
+    const candidate = String(value || "").trim();
+    if (!candidate) return "";
     try {
-      const parsed = new URL(url, global.location.href);
-      if (!['http:', 'https:'].includes(parsed.protocol)) return "";
-      return url;
+      const parsed = new URL(candidate, global.location.href);
+      return ["http:", "https:"].includes(parsed.protocol) ? candidate : "";
     } catch {
       return "";
     }
@@ -51,22 +31,13 @@
 
   function linkAttributes(url, label, target = "_self") {
     const safe = safeUrl(url);
-    const targetAttributes = target === "_blank"
-      ? ' target="_blank" rel="noopener noreferrer"'
-      : "";
-    return safe
-      ? `href="${escapeHtml(safe)}"${targetAttributes} aria-label="${escapeHtml(label)}"`
-      : `href="#" data-pending-link aria-label="${escapeHtml(label)}（链接待配置）"`;
+    if (!safe) return `href="#" data-pending-link aria-label="${escapeHtml(label)}（链接待配置）"`;
+    const external = target === "_blank" ? ' target="_blank" rel="noopener noreferrer"' : ` target="${escapeHtml(target)}"`;
+    return `href="${escapeHtml(safe)}"${external} aria-label="${escapeHtml(label)}"`;
   }
 
-  function normalize(value) {
-    return String(value || "").toLocaleLowerCase("zh-CN").replace(/\s+/g, " ").trim();
-  }
-
-  function matchesSearch(item) {
-    const term = normalize(state.searchTerm);
-    if (!term) return true;
-    return normalize(Object.values(item || {}).join(" ")).includes(term);
+  function courseHref(courseId) {
+    return `../learning_course/?course=${encodeURIComponent(courseId)}`;
   }
 
   function parseDate(value) {
@@ -83,17 +54,27 @@
     };
   }
 
-  function formatDate(value, options = {}) {
+  function formatDate(value, includeTime = false) {
     const date = parseDate(value);
     if (!date) return "日期待定";
-    return new Intl.DateTimeFormat(options.locale || "zh-CN", {
-      year: options.year || "numeric",
-      month: options.month || "2-digit",
-      day: options.day || "2-digit",
+    return new Intl.DateTimeFormat("zh-CN", {
+      year: "numeric", month: "2-digit", day: "2-digit",
+      ...(includeTime ? { hour: "2-digit", minute: "2-digit", hour12: false } : {}),
     }).format(date);
   }
 
-  let toastTimer = 0;
+  function activeCourses(type) {
+    return content.courses
+      .filter((course) => course.isActive !== false && course.type === type)
+      .sort((left, right) => Number(left.sortOrder || 0) - Number(right.sortOrder || 0));
+  }
+
+  function seatsLabel(course) {
+    const seats = Number(course.seatsLeft);
+    if (!Number.isFinite(seats)) return "无需选座";
+    return seats > 0 ? `剩余 ${seats} 席` : "开放候补";
+  }
+
   function showToast(message) {
     const toast = query("[data-toast]");
     if (!toast) return;
@@ -105,334 +86,153 @@
 
   function initializeRoutes() {
     queryAll("[data-route]").forEach((link) => {
-      const routeKey = link.dataset.route;
-      const route = config.routes?.[routeKey];
+      const route = config.routes?.[link.dataset.route];
       const destination = safeUrl(route?.url);
-
       if (!destination) {
         link.dataset.routeStatus = "pending";
         link.setAttribute("aria-disabled", "true");
         return;
       }
-
       link.href = destination;
       link.target = route.target || "_self";
       link.dataset.routeStatus = "ready";
       link.removeAttribute("aria-disabled");
-
       if (link.target === "_blank") link.rel = "noopener noreferrer";
-    });
-  }
-
-  function initializeChrome() {
-    const header = query("[data-header]");
-    const menuButton = query("[data-menu-toggle]");
-    const navigation = query("[data-navigation]");
-
-    const updateHeader = () => header?.classList.toggle("is-scrolled", global.scrollY > 22);
-    updateHeader();
-    global.addEventListener("scroll", updateHeader, { passive: true });
-
-    menuButton?.addEventListener("click", () => {
-      const willOpen = !navigation?.classList.contains("is-open");
-      navigation?.classList.toggle("is-open", willOpen);
-      menuButton.setAttribute("aria-expanded", String(willOpen));
-      document.body.classList.toggle("menu-open", willOpen);
-    });
-
-    navigation?.addEventListener("click", (event) => {
-      if (!event.target.closest("a")) return;
-      navigation.classList.remove("is-open");
-      menuButton?.setAttribute("aria-expanded", "false");
-      document.body.classList.remove("menu-open");
-    });
-
-    document.addEventListener("click", (event) => {
-      const pendingLink = event.target.closest('[data-route-status="pending"], [data-pending-link]');
-      if (!pendingLink) return;
-      event.preventDefault();
-      showToast("这个业务入口已经预留。填写 SharePoint 或 LMS 的正式网址后即可跳转。");
     });
   }
 
   function initializeRevealMotion() {
     const items = queryAll(".reveal-item:not([data-reveal-bound])");
-    const reducedMotion = global.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (reducedMotion || !("IntersectionObserver" in global)) {
+    if (global.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in global)) {
       items.forEach((item) => item.classList.add("is-visible"));
       return;
     }
-
-    const observer = new IntersectionObserver(
-      (entries, currentObserver) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          currentObserver.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -7%" },
-    );
-
+    const observer = new IntersectionObserver((entries, current) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        current.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -7%" });
     items.forEach((item) => {
       item.dataset.revealBound = "true";
       observer.observe(item);
     });
   }
 
-  function renderEssential(item) {
-    const root = query("[data-essential-card]");
+  function renderEssential() {
+    const root = query("[data-essential-list]");
     if (!root) return;
-
-    if (!item) {
-      root.innerHTML = `
-        <div class="essential-card__content">
-          <span class="essential-card__label">ESSENTIAL LEARNING</span>
-          <h2 id="essential-title">本月暂无新增必学任务</h2>
-          <p class="essential-card__summary">SharePoint List 中新增启用项目后，此处会自动显示。</p>
-        </div>`;
+    const courses = activeCourses("essential");
+    if (!courses.length) {
+      root.innerHTML = '<div class="empty-state"><strong>当前没有启用的必修课程</strong><span>在 content.js 中启用课程后会自动显示。</span></div>';
       return;
     }
-
-    const label = item.title || "Essential Learning";
-    root.innerHTML = `
-      <div class="essential-card__content">
-        <div class="essential-card__topline">
-          <span class="essential-card__label">ESSENTIAL LEARNING · THIS MONTH</span>
-          <span class="essential-card__status">${escapeHtml(item.status || "Action required")}</span>
-        </div>
-        <h2 id="essential-title">${escapeHtml(label)}</h2>
-        <p class="essential-card__title-zh">${escapeHtml(item.titleZh)}</p>
-        <p class="essential-card__summary">${escapeHtml(item.summary)}</p>
-      </div>
-      <div class="essential-card__action">
-        <div class="essential-card__due">
-          <span>Due date</span>
-          <strong>${escapeHtml(formatDate(item.dueDate, { year: undefined }))}</strong>
-        </div>
-        <a class="round-action" ${linkAttributes(item.url || config.routes?.essentialLearning?.url, `打开 ${label}`, config.routes?.essentialLearning?.target)}>
-          <span aria-hidden="true">↗</span>
-        </a>
-      </div>`;
+    root.innerHTML = courses.map((course, index) => `
+      <a class="essential-course-card reveal-item" href="${escapeHtml(courseHref(course.id))}" target="_self" style="--delay:${index * 80}ms" aria-label="查看必修课程 ${escapeHtml(course.titleZh || course.title)}">
+        <span class="essential-course-card__index">${String(index + 1).padStart(2, "0")}</span>
+        <span class="essential-course-card__status">${escapeHtml(course.status)}</span>
+        <span class="essential-course-card__topic">${escapeHtml(course.topic)}</span>
+        <strong>${escapeHtml(course.title)}</strong>
+        <b>${escapeHtml(course.titleZh)}</b>
+        <span class="essential-course-card__summary">${escapeHtml(course.summary)}</span>
+        <span class="essential-course-card__due"><small>DUE DATE</small>${escapeHtml(formatDate(course.dueDate))}</span>
+        <span class="essential-course-card__arrow" aria-hidden="true">→</span>
+      </a>`).join("");
   }
 
   function renderClasses() {
     const root = query("[data-upcoming-list]");
-    if (!root || !state.data) return;
-
-    const items = state.data.upcomingClasses.filter((item) => {
-      const matchesTopic = state.courseTopic === "all" || item.topic === state.courseTopic;
-      return matchesTopic && matchesSearch(item);
-    });
-
-    if (!items.length) {
-      root.innerHTML = emptyState("没有找到符合条件的课程", "尝试更换主题或搜索关键词。");
+    if (!root) return;
+    const courses = activeCourses("upcoming").filter((course) => state.courseTopic === "all" || course.topic === state.courseTopic);
+    if (!courses.length) {
+      root.innerHTML = '<div class="empty-state"><strong>没有符合条件的课程</strong><span>请选择其他课程主题。</span></div>';
       return;
     }
-
-    root.innerHTML = items.map((item) => {
-      const date = dateParts(item.startDate);
-      const statusClass = Number(item.seatsLeft) <= 6 ? "is-limited" : "";
-      const accent = topicColors[item.topic] || topicColors.Quality;
-      const label = `${item.title} ${item.titleZh}`;
+    root.innerHTML = courses.map((course, index) => {
+      const date = dateParts(course.startDate);
+      const limited = Number(course.seatsLeft) <= 6 ? "is-limited" : "";
+      const accent = topicColors[course.topic] || topicColors.Quality;
       return `
-        <a class="course-card reveal-item" style="--card-accent:${accent}" ${linkAttributes(item.url, label, config.contentLinkTarget)}>
-          <div class="course-card__top">
-            <div class="date-badge"><strong>${escapeHtml(date.day)}</strong><span>${escapeHtml(date.month)}</span></div>
-            <span class="course-card__status ${statusClass}">${escapeHtml(item.status)}</span>
-          </div>
-          <span class="course-card__topic">${escapeHtml(item.topic)}</span>
-          <h3>${escapeHtml(item.title)}</h3>
-          <p class="course-card__zh">${escapeHtml(item.titleZh)}</p>
-          <ul class="course-card__facts" aria-label="课程信息">
-            <li>${escapeHtml(item.format)}</li>
-            <li>${escapeHtml(item.language)}</li>
-            <li>${Number(item.seatsLeft) > 0 ? `${escapeHtml(item.seatsLeft)} seats` : "Waitlist"}</li>
-          </ul>
+        <a class="course-card reveal-item" href="${escapeHtml(courseHref(course.id))}" target="_self" style="--card-accent:${accent};--delay:${index * 75}ms" aria-label="查看课程 ${escapeHtml(course.titleZh || course.title)}">
+          <div class="course-card__top"><div class="date-badge"><strong>${escapeHtml(date.day)}</strong><span>${escapeHtml(date.month)}</span></div><span class="course-card__status ${limited}">${escapeHtml(course.status)}</span></div>
+          <span class="course-card__topic">${escapeHtml(course.topic)}</span>
+          <h3>${escapeHtml(course.title)}</h3><p class="course-card__zh">${escapeHtml(course.titleZh)}</p>
+          <ul class="course-card__facts" aria-label="课程信息"><li>${escapeHtml(course.format)}</li><li>${escapeHtml(course.language)}</li><li>${escapeHtml(seatsLabel(course))}</li></ul>
           <span class="course-card__arrow" aria-hidden="true">→</span>
         </a>`;
     }).join("");
-
     initializeRevealMotion();
+  }
+
+  function renderRecommended() {
+    const root = query("[data-recommended-list]");
+    if (!root) return;
+    const courses = activeCourses("upcoming").filter((course) => course.recommended === true);
+    if (!courses.length) {
+      root.innerHTML = '<div class="recommended-empty">当前暂无推荐课程</div>';
+      return;
+    }
+    root.innerHTML = courses.map((course, index) => `
+      <a class="recommended-course" href="${escapeHtml(courseHref(course.id))}" target="_self">
+        <span>${String(index + 1).padStart(2, "0")}</span>
+        <div><small>${escapeHtml(course.topic)} · ${escapeHtml(formatDate(course.startDate))}</small><strong>${escapeHtml(course.title)}</strong><b>${escapeHtml(course.titleZh)}</b></div>
+        <em>${escapeHtml(seatsLabel(course))}</em><i aria-hidden="true">↗</i>
+      </a>`).join("");
   }
 
   function renderReplays() {
     const root = query("[data-replay-list]");
-    if (!root || !state.data) return;
-    const items = state.data.replays.filter((item) => {
-      const matchesTopic = state.replayTopic === "all" || item.topic === state.replayTopic;
-      return matchesTopic && matchesSearch(item);
-    });
-
-    const count = query("[data-replay-count]");
-    if (count) count.textContent = String(items.length);
-
-    if (!items.length) {
-      root.innerHTML = emptyState("没有找到匹配的回放", "调整主题筛选或换一个关键词试试。");
-      return;
-    }
-
-    root.innerHTML = items.map((item) => {
-      const label = `播放 ${item.title}`;
-      return `
-        <a class="replay-item reveal-item" ${linkAttributes(item.url, label, config.contentLinkTarget)}>
-          <span class="replay-item__date">${escapeHtml(formatDate(item.sessionDate, { locale: "en-GB", year: "numeric", month: "short", day: "2-digit" }))}</span>
-          <div>
-            <span class="replay-item__topic">${escapeHtml(item.topic)}</span>
-            <h3>${escapeHtml(item.title)}</h3>
-            <span class="replay-item__zh">${escapeHtml(item.titleZh)}</span>
-          </div>
-          <span class="replay-item__speaker"><strong>${escapeHtml(item.speaker)}</strong>${escapeHtml(item.duration)}</span>
-          <span class="replay-item__play" aria-hidden="true">▶</span>
-        </a>`;
-    }).join("");
-
+    if (!root) return;
+    const replays = content.replays
+      .filter((replay) => replay.isActive !== false && (state.replayTopic === "all" || replay.topic === state.replayTopic))
+      .sort((left, right) => Number(left.sortOrder || 0) - Number(right.sortOrder || 0));
+    query("[data-replay-count]").textContent = String(replays.length);
+    root.innerHTML = replays.map((item) => `
+      <a class="replay-item reveal-item" ${linkAttributes(item.url, `播放 ${item.title}`, "_blank")}>
+        <span class="replay-item__date">${escapeHtml(formatDate(item.sessionDate))}</span>
+        <div><span class="replay-item__topic">${escapeHtml(item.topic)}</span><h3>${escapeHtml(item.title)}</h3><p class="replay-item__zh">${escapeHtml(item.titleZh)}</p></div>
+        <span class="replay-item__speaker"><small>Speaker</small><strong>${escapeHtml(item.speaker)}</strong><em>${escapeHtml(item.duration)}</em></span>
+        <span class="replay-item__play" aria-hidden="true">▶</span>
+      </a>`).join("");
     initializeRevealMotion();
   }
 
-  function renderCommunities() {
-    const root = query("[data-community-list]");
-    if (!root || !state.data) return;
-    const items = state.data.communities.filter(matchesSearch);
-
-    if (!items.length) {
-      root.innerHTML = emptyState("没有找到匹配的学习社群", "可以搜索 Digital、Quality 或 Lean 等主题。");
-      return;
-    }
-
-    root.innerHTML = items.map((item) => {
-      const initials = String(item.title || "LH")
-        .split(/\s+/)
-        .slice(0, 2)
-        .map((word) => word[0])
-        .join("")
-        .toUpperCase();
-      const color = communityColors[item.theme] || communityColors.lime;
-      const label = `进入 ${item.title}`;
-      return `
-        <a class="community-card reveal-item" style="--community-accent:${color}" ${linkAttributes(item.url, label, config.contentLinkTarget)}>
-          <span class="community-card__initials">${escapeHtml(initials)}</span>
-          <h3>${escapeHtml(item.title)}</h3>
-          <p class="community-card__zh">${escapeHtml(item.titleZh)}</p>
-          <p class="community-card__summary">${escapeHtml(item.summary)}</p>
-          <div class="community-card__meta">
-            <span>${escapeHtml(item.memberCount)} members · ${escapeHtml(item.cadence)}</span>
-            <span>Join ↗</span>
-          </div>
-        </a>`;
-    }).join("");
-
-    initializeRevealMotion();
-  }
-
-  function emptyState(title, detail) {
-    return `<div class="empty-state"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(detail)}</span></div>`;
-  }
-
-  function renderAll() {
-    renderClasses();
-    renderReplays();
-    renderCommunities();
-  }
-
-  function initializeFilters() {
+  function initializeInteractions() {
     query("[data-topic-filters]")?.addEventListener("click", (event) => {
       const button = event.target.closest("button[data-topic]");
       if (!button) return;
       state.courseTopic = button.dataset.topic || "all";
-      queryAll("button[data-topic]", event.currentTarget).forEach((item) => {
-        item.classList.toggle("is-active", item === button);
-      });
+      queryAll("button[data-topic]", event.currentTarget).forEach((item) => item.classList.toggle("is-active", item === button));
       renderClasses();
     });
-
     query("[data-replay-topic]")?.addEventListener("change", (event) => {
       state.replayTopic = event.target.value;
       renderReplays();
     });
-
-    const form = query("[data-global-search]");
-    const input = query("#learning-search");
-    let inputTimer = 0;
-
-    const applySearch = () => {
-      state.searchTerm = input?.value || "";
-      renderAll();
-    };
-
-    form?.addEventListener("submit", (event) => {
+    document.addEventListener("click", (event) => {
+      const pending = event.target.closest('[data-route-status="pending"], [data-pending-link]');
+      if (!pending) return;
       event.preventDefault();
-      applySearch();
-      query("#upcoming-classes")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-
-    input?.addEventListener("input", () => {
-      global.clearTimeout(inputTimer);
-      inputTimer = global.setTimeout(applySearch, 180);
+      showToast("这个业务入口已经预留，填写正式的 SharePoint、LMS 或视频网址后即可使用。");
     });
   }
 
-  function updateSourceStatus(data) {
-    const banner = query("[data-connection-banner]");
-    const label = query("[data-source-label]");
-    const panel = query("[data-integration-panel]");
-
-    if (panel) panel.hidden = config.showIntegrationPanel === false;
-
-    if (data.source === "sharepoint") {
-      if (label) label.textContent = "Live · SharePoint Lists";
-      banner?.classList.add("is-live");
-      return;
-    }
-
-    if (data.source === "fallback") {
-      if (label) label.textContent = "Preview fallback";
-      showToast(`SharePoint 暂未连接，当前显示示例数据：${data.sourceError}`);
-      return;
-    }
-
-    if (label) label.textContent = "Preview data";
-  }
-
-  async function loadData() {
-    if (!provider) throw new Error("数据提供器未加载。请检查 data-provider.js。");
-    const data = await provider.getPageData();
-    state.data = {
-      ...data,
-      upcomingClasses: Array.isArray(data.upcomingClasses) ? data.upcomingClasses : [],
-      replays: Array.isArray(data.replays) ? data.replays : [],
-      communities: Array.isArray(data.communities) ? data.communities : [],
-    };
-
-    const classCount = query("[data-hero-class-count]");
-    const replayCount = query("[data-hero-replay-count]");
-    if (classCount) classCount.textContent = String(state.data.upcomingClasses.length).padStart(2, "0");
-    if (replayCount) replayCount.textContent = String(state.data.replays.length).padStart(2, "0");
-
-    renderEssential(state.data.essentialLearning);
-    renderAll();
-    updateSourceStatus(state.data);
-  }
-
-  function renderLoadError(error) {
-    const message = error instanceof Error ? error.message : String(error);
-    const errorMarkup = `<div class="error-state"><strong>内容暂时无法加载</strong><span>${escapeHtml(message)}</span></div>`;
-    ["[data-upcoming-list]", "[data-replay-list]", "[data-community-list]"]
-      .forEach((selector) => {
-        const root = query(selector);
-        if (root) root.innerHTML = errorMarkup;
-      });
-    showToast("Learning Hub 数据加载失败，请检查配置或稍后重试。");
-  }
-
-  function init() {
+  function initializePage() {
+    const essential = activeCourses("essential");
+    const upcoming = activeCourses("upcoming");
+    query("[data-hero-essential-count]").textContent = String(essential.length).padStart(2, "0");
+    query("[data-hero-class-count]").textContent = String(upcoming.length).padStart(2, "0");
     initializeRoutes();
-    initializeChrome();
-    initializeFilters();
+    renderEssential();
+    renderClasses();
+    renderRecommended();
+    renderReplays();
+    initializeInteractions();
     initializeRevealMotion();
-    loadData().catch(renderLoadError);
+    const requestedId = global.location.hash.replace(/^#/, "");
+    if (requestedId) global.setTimeout(() => document.getElementById(requestedId)?.scrollIntoView({ block: "start" }), 40);
   }
 
-  init();
+  initializePage();
 })(window, document);

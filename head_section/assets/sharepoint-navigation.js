@@ -1,7 +1,9 @@
 /**
  * SharePoint page destinations for every Home-page entry point.
  *
- * Keep `url` empty until the corresponding SharePoint page is available.
+ * `previewUrl` makes every card work immediately on GitHub Pages and inside
+ * the current Embed frame. When the real SharePoint Page exists, fill `url`;
+ * it will take priority and navigate the top SharePoint window.
  * Both server-relative URLs and full HTTPS URLs are supported. Examples:
  *   /sites/GSC-Learning/SitePages/Learning-Hub.aspx
  *   https://contoso.sharepoint.com/sites/GSC-Learning/SitePages/Learning-Hub.aspx
@@ -10,10 +12,10 @@
  * pages should normally keep target: "_self" so navigation replaces Home.
  */
 export const sharePointRoutes = Object.freeze({
-  essentialLearning: { url: "", target: "_self" },
-  upcomingClasses: { url: "", target: "_self" },
-  competencyFramework: { url: "", target: "_self" },
-  expertsTrainers: { url: "", target: "_self" },
+  essentialLearning: { url: "", previewUrl: "../learning_hub/#essential-learning", target: "_top" },
+  upcomingClasses: { url: "", previewUrl: "../learning_hub/#upcoming-classes", target: "_top" },
+  competencyFramework: { url: "", previewUrl: "../competency_framework/#role-explorer", target: "_top" },
+  expertsTrainers: { url: "", previewUrl: "../experts_trainers/#expert-directory", target: "_top" },
   learningInsights: { url: "", target: "_self" },
 });
 
@@ -24,17 +26,19 @@ export function initializeSharePointNavigation(root = document) {
     const routeKey = link.dataset.sharepointRoute;
     const destination = sharePointRoutes[routeKey];
     const configuredUrl = destination?.url?.trim();
+    const previewUrl = destination?.previewUrl?.trim();
+    const resolvedUrl = configuredUrl || previewUrl;
 
-    if (!configuredUrl) {
+    if (!resolvedUrl) {
       link.dataset.routeStatus = "pending";
       link.setAttribute("aria-disabled", "true");
       link.addEventListener("click", preventPendingNavigation);
       return;
     }
 
-    link.href = configuredUrl;
-    link.target = destination.target || "_self";
-    link.dataset.routeStatus = "ready";
+    link.href = resolvedUrl;
+    link.target = configuredUrl ? (destination.target || "_top") : "_self";
+    link.dataset.routeStatus = configuredUrl ? "ready" : "preview";
     link.removeAttribute("aria-disabled");
 
     if (link.target === "_blank") {

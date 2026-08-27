@@ -1,104 +1,64 @@
-# Learning Hub 页面
+# Learning Hub 页面与数据维护
 
-这是与 `head_section` 相互独立的 Learning Hub 页面原型。它按照 SharePoint 多页面网站的逻辑设计：顶部导航和卡片使用真实链接跳转，而不是在同一个 HTML 中切换视觉页面。
+本页面不包含站点导航，适合放在 SharePoint Page 的 Embed Web Part 中。
 
-## 本地预览
+## 当前页面结构
 
-在仓库根目录运行：
+1. Hero 固定介绍
+2. `#essential-learning`：企业必修学习
+3. `#upcoming-classes`：近期开课
+4. `#recommended-learning-paths`：从近期开课中自动提取推荐课程
+5. `#replay-library`：往期课程回放
 
-```powershell
-python -m http.server 4173 --bind 127.0.0.1 --directory learning_hub
+旧的单条 Essential 横幅、Hero 搜索框、Learning Communities 和 SharePoint List/SPFx 数据适配层已经移除。
+
+## 唯一课程数据文件
+
+课程卡片、推荐列表和通用课程详情页都读取：
+
+```text
+learning_hub/content.js > courses
 ```
 
-然后访问 `http://127.0.0.1:4173/`。
+课程详情页不是一门课程一个 HTML，而是共用：
 
-## 文件说明
-
-- `index.html`：页面语义结构和动态内容挂载窗口。
-- `styles.css`：桌面端、平板端和移动端响应式样式。
-- `config.js`：SharePoint 页面地址、外部平台地址和 List 配置。
-- `data-provider.js`：示例数据与 SharePoint REST 数据适配器。
-- `app.js`：数据渲染、搜索筛选、导航占位提醒和页面动效。
-- `DEVELOPMENT_AND_OPERATIONS_MANUAL.md`：完整开发、内容发布、SPFx 迁移和运维手册。
-
-## 当前工作模式
-
-`config.js` 中的 `dataMode` 当前是 `mock`，页面使用示例数据，但所有内容仍通过异步数据提供器加载。正式接入后把它改为：
-
-```js
-dataMode: "sharepoint"
+```text
+learning_course/?course=课程ID
 ```
 
-并填写：
+## Excel 建议格式
 
-```js
-sharePoint: {
-  siteUrl: "https://你的租户.sharepoint.com/sites/你的站点",
-  // ...
-}
-```
+以后可提供一个 Excel，其中 `Courses` 工作表每行代表一门课程：
 
-## 需要建立的 SharePoint Lists
+| Excel 列 | 对应字段 | 说明 |
+| --- | --- | --- |
+| `course_id` | `id` | 唯一且稳定，例如 `root-cause-analysis-workshop` |
+| `course_type` | `type` | `essential` 或 `upcoming` |
+| `title_en` / `title_zh` | `title` / `titleZh` | 中英文课程名 |
+| `topic` | `topic` | Quality、Leadership、Digital、Operations、Compliance |
+| `summary` | `summary` | 卡片短介绍 |
+| `description` | `description` | 详情页完整介绍 |
+| `learning_outcomes` | `learningOutcomes` | 多项内容用换行或分号分隔 |
+| `audience` / `instructor` | 同名字段 | 适合人群、讲师或团队 |
+| `due_date` | `dueDate` | 必修课完成截止日期 |
+| `start_date` / `end_date` | 同名字段 | 近期开课时间 |
+| `registration_deadline` | `registrationDeadline` | 报名截止日期 |
+| `format` / `location` / `language` | 同名字段 | 授课信息 |
+| `status` | `status` | 报名中、席位有限、开放候补、Required 等 |
+| `total_seats` / `seats_left` | 同名字段 | 近期开课的总席位和剩余席位 |
+| `action_url` | `actionUrl` | LMS 或课程报名页面网址 |
+| `recommended` | `recommended` | `TRUE` 时出现在 Recommended Learning Paths |
+| `is_active` | `isActive` | `TRUE` 展示；`FALSE` 隐藏 |
+| `sort_order` | `sortOrder` | 页面排序 |
 
-建议建立以下四个 List。字段名称最好使用下表中的英文内部名称；如果企业已有 List，只需在 `config.js` 的 `fields` 中修改映射。
+`Replays` 工作表可以继续维护回放名称、讲师、日期、主题、时长和视频网址。
 
-### 1. Learning Hub - Essential Learning
+## 日常更新方法
 
-| 字段 | 建议类型 |
-| --- | --- |
-| Title | 单行文本 |
-| TitleZh | 单行文本 |
-| Summary | 多行文本 |
-| DueDate | 日期和时间 |
-| Status | 选项 |
-| LinkUrl | 超链接 |
-| IsActive | 是/否 |
+- 必修课：`course_type=essential`，填写 `due_date`。
+- 近期开课：`course_type=upcoming`，填写日期、状态、总席位和剩余席位。
+- 推荐课程：在对应近期开课行把 `recommended` 设置为 `TRUE`，不用重复创建课程。
+- 暂时下线：把 `is_active` 设置为 `FALSE`。
+- 把 Excel 交给开发者后，只需转换并更新 `content.js`，不用修改 HTML/CSS。
 
-### 2. Learning Hub - Upcoming Classes
-
-| 字段 | 建议类型 |
-| --- | --- |
-| Title / TitleZh | 单行文本 |
-| StartDate / EndDate | 日期和时间 |
-| Topic | 选项：Leadership、Digital、Quality、Operations |
-| Format / Language / Status | 单行文本或选项 |
-| SeatsLeft / SortOrder | 数字 |
-| LinkUrl | 超链接 |
-| IsActive | 是/否 |
-
-### 3. Learning Hub - Replays
-
-| 字段 | 建议类型 |
-| --- | --- |
-| Title / TitleZh / Speaker / Duration | 单行文本 |
-| SessionDate | 日期和时间 |
-| Topic | 选项 |
-| LinkUrl | 超链接 |
-| IsActive | 是/否 |
-| SortOrder | 数字 |
-
-### 4. Learning Hub - Communities
-
-| 字段 | 建议类型 |
-| --- | --- |
-| Title / TitleZh / Cadence / Theme | 单行文本或选项 |
-| Summary | 多行文本 |
-| MemberCount / SortOrder | 数字 |
-| LinkUrl | 超链接 |
-| IsActive | 是/否 |
-
-## SharePoint 部署注意事项
-
-GitHub Pages 被嵌入 SharePoint 时处于跨域 iframe 中，通常不能直接带着员工的 SharePoint 登录身份读取 Lists。正式动态版建议把这套页面迁入 **SPFx Web Part**，再通过 `SPHttpClient` 读取 Lists；当前 HTML、CSS、字段配置和渲染逻辑可以作为 SPFx 实现的页面原型。
-
-如果页面代码最终运行在与 Lists 相同的 SharePoint 站点域名下，现有 `data-provider.js` 的 REST 适配器也可以继续使用。切换数据源前建议把 `fallbackToMock` 改成 `false`，这样配置错误不会被示例数据掩盖。
-
-## 正式上线前需要配置
-
-1. 在 `config.js > routes` 填写 Home、Competency Framework、Experts、Insights 及各业务入口的正式 URL。
-2. 建立或确认四个 SharePoint Lists，并核对字段内部名称。
-3. 决定用 SPFx 部署，还是让代码运行在 SharePoint 同域环境中。
-4. 将 List 权限设置为员工只读、内容维护人员可编辑。
-5. 用真实数据完成 UAT，重点检查日期、空数据、失效链接和移动端显示。
-
-GitHub Pages 嵌入 SharePoint 时，内部 SharePoint 页面链接应保留 `target: "_top"`；迁移为 SPFx Web Part 后再改为 `_self`。
+课程文件、报名表和 LMS 内容仍保存在公司 SharePoint、Stream 或 LMS，GitHub 只维护展示数据和获批准的入口网址。

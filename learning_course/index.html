@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="GSC China Learning Hub course details" />
+    <title>Course Details | GSC China</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="../learning_hub/content.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <main id="main-content">
+      <div data-course-page hidden>
+        <section class="course-hero" aria-labelledby="course-title">
+          <div class="course-hero__grid" aria-hidden="true"></div>
+          <div class="course-hero__orbit" aria-hidden="true"></div>
+          <div class="page-shell">
+            <a class="back-link" href="../learning_hub/" target="_self" data-back-link><span aria-hidden="true">←</span> 返回 Learning Hub</a>
+            <div class="course-hero__layout">
+              <div class="course-hero__copy reveal-item is-visible">
+                <div class="course-kicker"><span data-course-type></span><i data-recommended-badge hidden>RECOMMENDED</i></div>
+                <h1 id="course-title" data-course-title></h1>
+                <p class="course-title-zh" data-course-title-zh></p>
+                <p class="course-summary" data-course-summary></p>
+              </div>
+              <div class="course-signal-card reveal-item is-visible">
+                <span class="course-signal-card__topic" data-course-topic></span>
+                <div class="course-signal-card__date"><strong data-date-primary></strong><small data-date-secondary></small></div>
+                <div class="course-signal-card__status"><small>STATUS</small><strong data-course-status></strong></div>
+                <div class="seat-meter" data-seat-meter>
+                  <div><small>SEAT AVAILABILITY</small><strong data-seat-label></strong></div>
+                  <span><i data-seat-progress></i></span>
+                </div>
+              </div>
+            </div>
+            <div class="hero-facts reveal-item is-visible" data-hero-facts></div>
+          </div>
+        </section>
+
+        <section class="course-body" aria-labelledby="overview-title">
+          <div class="page-shell course-body__layout">
+            <article class="course-overview reveal-item">
+              <p class="eyebrow eyebrow--green">COURSE OVERVIEW</p>
+              <h2 id="overview-title">课程介绍</h2>
+              <p data-course-description></p>
+              <div class="outcomes">
+                <h3>完成课程后，你将能够</h3>
+                <ol data-learning-outcomes></ol>
+              </div>
+            </article>
+            <aside class="course-details reveal-item">
+              <p class="eyebrow eyebrow--green">AT A GLANCE</p>
+              <h2>课程信息</h2>
+              <dl data-course-details></dl>
+            </aside>
+          </div>
+        </section>
+
+        <section class="course-action-section">
+          <div class="page-shell course-action reveal-item">
+            <div><p class="eyebrow">READY FOR THE NEXT STEP</p><h2 data-action-title></h2><p data-action-description></p></div>
+            <a href="#" data-course-action><span data-action-label></span><i aria-hidden="true">↗</i></a>
+          </div>
+        </section>
+      </div>
+
+      <section class="course-error" data-course-error hidden aria-labelledby="error-title">
+        <div><span>404</span><p class="eyebrow eyebrow--green">COURSE NOT FOUND</p><h1 id="error-title">没有找到这门课程</h1><p>课程 ID 可能已调整，或课程已停止展示。</p><a href="../learning_hub/" target="_self">返回 Learning Hub →</a></div>
+      </section>
+    </main>
+    <footer class="page-footer"><span>GSC China Learning &amp; Competency</span><span data-content-version></span></footer>
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+  </body>
+</html>

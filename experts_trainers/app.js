@@ -139,4 +139,6 @@
   }
 
   renderFeaturedCourse(); renderFilters(); renderExperts(); renderCourses(); initializeInteractions(); initializeReveal();
+  const requestedId = global.location.hash.replace(/^#/, "");
+  if (requestedId) global.setTimeout(() => document.getElementById(requestedId)?.scrollIntoView({ block: "start" }), 40);
 })(window, document);
