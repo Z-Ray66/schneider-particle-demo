@@ -26,11 +26,15 @@
     toastTimer = global.setTimeout(() => toast.classList.remove("is-visible"), 3200);
   }
 
-  function actionAttributes(url, label) {
+  function actionAttributes(url, label, target = "_top") {
     const safe = safeUrl(url);
     return safe
-      ? `href="${escapeHtml(safe)}" target="_top" aria-label="${escapeHtml(label)}"`
+      ? `href="${escapeHtml(safe)}" target="${escapeHtml(target)}" aria-label="${escapeHtml(label)}"`
       : `href="#" data-pending-link aria-label="${escapeHtml(label)}（链接待配置）"`;
+  }
+
+  function profileHref(expertId) {
+    return `../expert_profile/?expert=${encodeURIComponent(expertId)}`;
   }
 
   function renderFeaturedCourse() {
@@ -63,13 +67,16 @@
     const experts = filteredExperts();
     if (!root) return;
     if (!experts.some((expert) => expert.id === activeExpertId)) activeExpertId = experts[0]?.id || "";
-    root.innerHTML = experts.map((expert, index) => `
-      <button class="expert-card ${expert.id === activeExpertId ? "is-active" : ""}" type="button" data-expert-id="${escapeHtml(expert.id)}" style="--card-index:${index}">
+    root.innerHTML = experts.map((expert, index) => {
+      const courseCount = (expert.courses || []).filter((course) => course.isActive !== false).length;
+      return `
+      <a class="expert-card ${expert.id === activeExpertId ? "is-active" : ""}" href="${escapeHtml(profileHref(expert.id))}" target="_self" data-expert-id="${escapeHtml(expert.id)}" style="--card-index:${index}" aria-label="查看 ${escapeHtml(expert.name)} 的导师主页和 ${courseCount} 门课程">
         <span class="expert-card__portrait"><b>${escapeHtml(expert.initials)}</b><i></i></span>
         <span class="expert-card__topic">${escapeHtml(expert.topic)}</span>
-        <strong>${escapeHtml(expert.name)}</strong><small>${escapeHtml(expert.role)}</small>
+        <strong>${escapeHtml(expert.name)}</strong><small>${escapeHtml(expert.role)} · ${courseCount} 门课程</small>
         <span class="expert-card__arrow">↗</span>
-      </button>`).join("");
+      </a>`;
+    }).join("");
     renderSpotlight();
   }
 
@@ -83,7 +90,10 @@
       <blockquote>“${escapeHtml(expert.statement)}”</blockquote>
       <div class="spotlight-tags">${expert.expertise.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>
       <dl><div><dt>Languages</dt><dd>${escapeHtml(expert.languages.join(" · "))}</dd></div><div><dt>Connect</dt><dd>${escapeHtml(expert.availability)}</dd></div><div><dt>Location</dt><dd>${escapeHtml(expert.location)}</dd></div></dl>
-      <a ${actionAttributes(expert.contactUrl, `联系 ${expert.name}`)}>联系 / 预约 <span>↗</span></a>`;
+      <div class="spotlight-actions">
+        <a class="spotlight-actions__profile" href="${escapeHtml(profileHref(expert.id))}" target="_self">查看导师课程 <span>→</span></a>
+        <a class="spotlight-actions__contact" ${actionAttributes(expert.contactUrl, `联系 ${expert.name}`)}>联系 / 预约 <span>↗</span></a>
+      </div>`;
   }
 
   function renderCourses() {
@@ -101,12 +111,15 @@
       const button = event.target.closest("button[data-topic]"); if (!button) return;
       activeTopic = button.dataset.topic; renderFilters(); renderExperts();
     });
-    query("[data-expert-grid]")?.addEventListener("click", (event) => {
+    const previewExpert = (event) => {
       const card = event.target.closest("[data-expert-id]"); if (!card) return;
+      if (card.dataset.expertId === activeExpertId) return;
       activeExpertId = card.dataset.expertId;
       queryAll("[data-expert-id]").forEach((item) => item.classList.toggle("is-active", item === card));
       renderSpotlight();
-    });
+    };
+    query("[data-expert-grid]")?.addEventListener("pointerover", previewExpert);
+    query("[data-expert-grid]")?.addEventListener("focusin", previewExpert);
     document.addEventListener("click", (event) => {
       const pending = event.target.closest("[data-pending-link]");
       if (!pending) return; event.preventDefault(); showToast("入口已预留，填写正式 SharePoint、LMS 或预约页面网址后即可使用。");

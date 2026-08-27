@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="GSC China internal expert profile and course library" />
+    <title>Expert Courses | GSC China</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <!-- 所有导师和课程数据只维护这一份文件。 -->
+    <script src="../experts_trainers/content.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <main id="main-content">
+      <div class="profile-page" data-profile-page hidden>
+        <section class="profile-hero" aria-labelledby="profile-name">
+          <div class="profile-hero__grid" aria-hidden="true"></div>
+          <div class="profile-hero__orb" aria-hidden="true"></div>
+          <div class="page-shell">
+            <a class="back-link" href="../experts_trainers/#expert-directory" target="_self">
+              <span aria-hidden="true">←</span> 返回专家目录
+            </a>
+
+            <div class="profile-hero__layout">
+              <div class="profile-identity reveal-item is-visible">
+                <div class="profile-portrait" aria-hidden="true">
+                  <span data-profile-initials></span>
+                  <i></i>
+                  <small>INTERNAL<br />VOICE</small>
+                </div>
+                <div class="profile-signal" aria-hidden="true"><i></i><i></i><i></i></div>
+              </div>
+
+              <div class="profile-copy reveal-item is-visible">
+                <p class="eyebrow" data-profile-topic></p>
+                <h1 id="profile-name" data-profile-name></h1>
+                <p class="profile-role" data-profile-role></p>
+                <blockquote data-profile-statement></blockquote>
+                <p class="profile-bio" data-profile-bio></p>
+                <div class="expertise-list" data-profile-expertise aria-label="专业领域"></div>
+              </div>
+            </div>
+
+            <div class="profile-facts reveal-item is-visible" data-profile-facts></div>
+          </div>
+        </section>
+
+        <section class="course-library" aria-labelledby="course-library-title">
+          <div class="page-shell">
+            <header class="section-heading reveal-item">
+              <div>
+                <p class="eyebrow eyebrow--green">LEARN FROM THIS EXPERT</p>
+                <h2 id="course-library-title">导师课程</h2>
+              </div>
+              <p><strong data-course-count></strong> 门当前可展示课程。视频由公司 SharePoint 或 Microsoft Stream 托管，点击课程入口后打开对应视频页面。</p>
+            </header>
+            <div class="course-grid" data-expert-courses></div>
+          </div>
+        </section>
+
+        <section class="profile-contact" aria-labelledby="contact-title">
+          <div class="page-shell contact-card reveal-item">
+            <div>
+              <p class="eyebrow">CONNECT THE KNOWLEDGE</p>
+              <h2 id="contact-title">需要进一步交流？</h2>
+              <p>如果课程没有覆盖你的具体问题，可以通过公司批准的预约入口联系导师。</p>
+            </div>
+            <a href="#" data-contact-link>联系 / 预约 <span aria-hidden="true">↗</span></a>
+          </div>
+        </section>
+      </div>
+
+      <section class="profile-error" data-profile-error hidden aria-labelledby="error-title">
+        <div>
+          <span>404</span>
+          <p class="eyebrow eyebrow--green">EXPERT NOT FOUND</p>
+          <h1 id="error-title">没有找到这位导师</h1>
+          <p>导师 ID 可能已调整，或者链接尚未正确配置。</p>
+          <a href="../experts_trainers/#expert-directory" target="_self">返回专家目录 →</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer"><span>GSC China Learning &amp; Competency</span><span data-data-version></span></footer>
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+  </body>
+</html>
